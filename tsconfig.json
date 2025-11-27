@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "target": "ES2020",                                /* Good for Node 18+ */
+    "module": "CommonJS",                              /* The standard for Node backends */
+    "moduleResolution": "node",
+    "esModuleInterop": true,                           /* Allows: import express from 'express' */
+    "resolveJsonModule": true,                         /* Allows importing .json files */
+    "skipLibCheck": true,                              /* Skips checking types inside node_modules (saves headaches) */
+    "forceConsistentCasingInFileNames": true,
+    
+    /* Output Options */
+    "outDir": "./dist",                                /* compiled js goes here */
+    "rootDir": "./src",                                
+    "removeComments": true,
+    
+    /* Strictness - turning off the annoying ones for now */
+    "strict": true,
+    "noImplicitAny": false,                            /* Set to true later if you want strict types */
+    "strictPropertyInitialization": false,             /* vital for Mongoose models */
+    
+    /* THE FIX FOR YOUR ERROR */
+    "verbatimModuleSyntax": false                      /* Must be false for CommonJS backends */
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
