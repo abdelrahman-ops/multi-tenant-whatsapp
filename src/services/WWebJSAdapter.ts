@@ -4,6 +4,7 @@ import { WhatsAppNumber } from '../models/WhatsAppNumber';
 import { redis } from '../lib/redis';
 import { getIO } from './SocketService';
 import { messageQueue } from '../queues/producers';
+import QRCode from 'qrcode'; 
 
 export class WWebJSAdapter {
   public client: Client;
@@ -28,12 +29,15 @@ export class WWebJSAdapter {
   }
 
   private initializeEvents() {
-    this.client.on('qr', async (qr) => {
+    this.client.on('qr', async (qrRaw) => {
+        const qrImage = await QRCode.toDataURL(qrRaw);
+
       // 1. Store QR in DB/Redis for persistence if frontend reloads
-      await WhatsAppNumber.updateOne({ phoneId: this.phoneId }, { qrCode: qr, status: 'QR_READY' });
+
+      await WhatsAppNumber.updateOne({ phoneId: this.phoneId }, { qrCode: qrImage, status: 'QR_READY' });
       
       // 2. Emit Realtime
-      getIO().emit(`qr:${this.phoneId}`, { qr });
+      getIO().emit(`qr:${this.phoneId}`, { qr: qrImage });
     });
 
     this.client.on('ready', async () => {
